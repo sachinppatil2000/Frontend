@@ -64,6 +64,9 @@ public class FactoryActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.string.action_settings) {
+
+
+
             return true;
         }
 
