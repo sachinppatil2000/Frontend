@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (Optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+
+
+    <string name="error_invalid_email">Sign in</string>
+    <string name="error_invalid_password">Sign in</string>
+    <string name="error_incorrect_password">Sign in</string>
+    <string name="error_field_required">Sign in</string>
+
+
+</resources>
