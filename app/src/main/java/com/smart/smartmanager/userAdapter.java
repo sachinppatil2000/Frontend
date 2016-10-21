@@ -56,7 +56,7 @@ public class userAdapter extends ArrayAdapter<userModel> {
         TextView tvName = (TextView) convertView.findViewById(R.id.Name);
 
         final Button button = (Button) convertView.findViewById(R.id.phone);
-        button.setText(user.getPhoneno());
+            button.setText(user.getPhoneno());
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -68,8 +68,7 @@ public class userAdapter extends ArrayAdapter<userModel> {
                     usermachinActivity.startActivity(callIntent);
                 }
                 catch(Exception e) {
-
-                    e.printStackTrace();
+                     e.printStackTrace();
                      }
 
             }

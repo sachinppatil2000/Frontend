@@ -39,11 +39,16 @@ public class RegistrationIntentService extends IntentService {
     public RegistrationIntentService() {
         super(TAG);
     }
-    SharedPreferences sharedPreferences = null;
 
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, ">>>onCreate()");
+    }
+    SharedPreferences sharedPreferences = null;
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG, "on handle intent called");
         if(!isNetworkAvailable())
         {
            // moveTaskToBack(true);
@@ -63,11 +68,11 @@ public class RegistrationIntentService extends IntentService {
                 // Initially this call goes out to the network to retrieve the token, subsequent calls
                 // are local.
                 // [START get_token]
-                if(checkPlayServices()) {;
+                if(checkPlayServices()) {
                 InstanceID instanceID = InstanceID.getInstance(getBaseContext());
-
-                    String token = instanceID.getToken(getString(R.string.sender_id),
-                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+                   // String token = gcm.register(getString(R.string.gcm_defaultSenderId));
+                 String token = instanceID.getToken(getString(R.string.sender_id),GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                     // [END get_token]
                     Log.i(TAG, "GCM Registration Token: " + token);
                     System.out.println("GCM Registration Token: " + token);

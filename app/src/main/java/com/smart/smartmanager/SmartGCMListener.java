@@ -40,7 +40,7 @@ public class SmartGCMListener extends GcmListenerService {
 // [END receive_message]
 
         private void sendNotification(String message) {
-            Intent intent = new Intent(this, FactoryActivity.class);
+            Intent intent = new Intent(this,usermachine.class);
             intent.putExtra("gcmMessage",message);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,

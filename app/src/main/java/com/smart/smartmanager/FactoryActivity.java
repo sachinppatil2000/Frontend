@@ -27,7 +27,8 @@ public class FactoryActivity extends ActionBarActivity {
             }
             else
             {
-                String msg_dummy = getString(R.string.dummy_data);
+                String msg_dummy =  getString(R.string.dummy_data);
+                //getString(R.string.dummy_data);
                 message = msg_dummy;
             }
             FragmentManager fragmentManager = getFragmentManager();
