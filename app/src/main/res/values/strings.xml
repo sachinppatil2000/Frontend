@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">SmartManager</string>
     <string name="sender_id">186598140791</string>
-    <string name="dummy_data">{"Location":"Pune","Vendorid":"test","timestamp":1453269075875,"devices":[{"DeviceName":"ocbv1","username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"vibration","CurrentStatus":"off"},{"DeviceName":"ocbv1","username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"temperature","CurrentStatus":"on"},{"DeviceName":"ocbv1","username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"biometric","CurrentStatus":"on"}]}</string>
+    <string name="dummy_data">{\"Location\":\"Pune\",\"Vendorid\":\"test\",\"timestamp\":\"1453269075875\",\"devices\":[{\"DeviceName\":\"ocbv1\",\"username\":\"OSBB2B.TMME@TMME\",\"password\":\"tars123\",\"DeviceType\":\"vibration\",\"CurrentStatus\":\"off\"},{\"DeviceName\":\"ocbv1\",\"username\":\"OSBB2B.TMME@TMME\",\"password\":\"tars123\",\"DeviceType\":\"temperature\",\"CurrentStatus\":\"on\"},{\"DeviceName\":\"ocbv1\",\"username\":\"OSBB2B.TMME@TMME\",\"password\":\"tars123\",\"DeviceType\":\"biometric\",\"CurrentStatus\":\"on\"}]}</string>
+    <string name="sample1_data">{"Location":"Pune","Vendorid":"test","timestamp":1478312044965,"devices":[{"DeviceName":"BFW","username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"vibration","CurrentStatus":"off"},{"DeviceName":"Bakery","username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"temperature","CurrentStatus":"onoff"},{"DeviceName":"bioone","AttendenceInfo":[{"outtime":null,"contactno":"9422374710","employeeid":2555,"attendancedate":null,"intime":null,"employeename":"Sachin Patil"},{"outtime":null,"contactno":"9421222026","employeeid":2556,"attendancedate":null,"intime":null,"employeename":"Snehal Patil"},{"outtime":null,"contactno":" ","employeeid":2557,"attendancedate":null,"intime":null,"employeename":"Nishant"},{"outtime":null,"contactno":"9146302519","employeeid":2558,"attendancedate":null,"intime":null,"employeename":"Vinay Patil"},{"outtime":null,"contactno":" ","employeeid":2559,"attendancedate":null,"intime":null,"employeename":"Umesh"},{"outtime":null,"contactno":" ","employeeid":2560,"attendancedate":null,"intime":null,"employeename":"Ramesh"}],"username":"OSBB2B.TMME@TMME","password":"tars123","DeviceType":"biometric","CurrentStatus":"onoff"}]}</string>
+    <string name="sample_data">{\"devices\":[{\"DeviceType\":\"vibration\",\"password\":\"tars123\",\"CurrentStatus\":\"onoff\",\"DeviceName\":\"ABW\",\"username\":\"OSBB2B.TMME@TMME\"},{\"DeviceType\":\"temperature\",\"password\":\"tars123\",\"CurrentStatus\":\"onoff\",\"DeviceName\":\"Bakery\",\"username\":\"OSBB2B.TMME@TMME\"},{\"DeviceType\":\"biometric\",\"password\":\"tars123\",\"CurrentStatus\":\"onoff\",\"AttendenceInfo\":[{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2555\",\"attendancedate\":\"null\",\"employeename\":\"Sachin Patil\",\"contactno\":\"9422374710\"},{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2556\",\"attendancedate\":\"null\",\"employeename\":\"Snehal Patil\",\"contactno\":\"9421222026\"},{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2557\",\"attendancedate\":\"null\",\"employeename\":\"Nishant\",\"contactno\":\" \"},{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2558\",\"attendancedate\":\"null\",\"employeename\":\"Vinay Patil\",\"contactno\":\"9146302519\"},{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2559\",\"attendancedate\":\"null\",\"employeename\":\"Umesh\",\"contactno\":\" \"},{\"intime\":\"null\",\"outtime\":\"null\",\"employeeid\":\"2560\",\"attendancedate\":\"null\",\"employeename\":\"Ramesh\",\"contactno\":\" \"}],\"DeviceName\":\"bioone\",\"username\":\"OSBB2B.TMME@TMME\"}],\"Vendorid\":\"test\",\"Location\":\"Pune\",\"timestamp\":\"1477096547767\"}</string>
     <string name="hello_world">Hello World</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_factory">FactoryActivity</string>
@@ -11,15 +13,15 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item >Home</item>
-        <item >Find People</item>
+        <item >Pune</item>
+        <item >Mumbai</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
-        <item>@drawable/call1</item>
-        <item>@drawable/employee</item>
+        <item>@drawable/factory2</item>
+        <item>@drawable/factory2</item>
     </array>
 
     <!-- Content Description -->

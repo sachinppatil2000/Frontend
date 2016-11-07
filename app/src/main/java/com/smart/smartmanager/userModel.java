@@ -4,29 +4,39 @@ package com.smart.smartmanager;
  * Created by Sachin_Patil06 on 9/15/2015.
  */
 public class userModel {
-    private String Name;
+
+
+    private String employeename;
     private String Lastname;
     private int Age;
-    private String phoneNo;
+    private String contactno;
     private Boolean status;
 
-    public userModel(String firstName,String lastname,String phoneno,int age,Boolean status )
+    public userModel(String stremployeename,String phoneno,int age,Boolean status )
     {
-         Name = firstName;
-         Lastname = lastname ;
+      //   Name = firstName;
+        employeename = employeename ;
          Age =  age ;
-         phoneNo = phoneno;
+        contactno = phoneno;
+        this.employeename=stremployeename;
          this.status = status;
     }
 
-    public void setName(String name)
-    {
-        Name=name;
+    public String getEmployeename() {
+        return employeename;
     }
 
-    public String getName()
-    {
-        return Name;
+    public void setEmployeename(String employeename) {
+        this.employeename = employeename;
+    }
+
+
+    public String getContactno() {
+        return contactno;
+    }
+
+    public void setContactno(String contactno) {
+        this.contactno = contactno;
     }
 
     public void setLastName(String name)
@@ -48,15 +58,7 @@ public class userModel {
     {
         return Age;
     }
-    public void setPhoneno(String phoneno)
-    {
-        phoneNo=phoneno;
-    }
 
-    public String getPhoneno()
-    {
-        return phoneNo;
-    }
 
     public void setStatus(Boolean status)
     {

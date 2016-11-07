@@ -44,11 +44,11 @@ public class userAdapter extends ArrayAdapter<userModel> {
 
         if(user.getStatus())
         {
-            convertView.setBackgroundColor(Color.GREEN);
+            convertView.setBackgroundColor(Color.WHITE);
         }
         else
         {
-            convertView.setBackgroundColor(Color.RED);
+            convertView.setBackgroundColor(Color.WHITE);
         }
         // Lookup view for data population
         int resid = usermachinActivity.getResources().getIdentifier("employee","drawable",usermachinActivity.getPackageName());
@@ -56,7 +56,7 @@ public class userAdapter extends ArrayAdapter<userModel> {
         TextView tvName = (TextView) convertView.findViewById(R.id.Name);
 
         final Button button = (Button) convertView.findViewById(R.id.phone);
-            button.setText(user.getPhoneno());
+            button.setText(user.getContactno());
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -75,7 +75,7 @@ public class userAdapter extends ArrayAdapter<userModel> {
         });
         TextView tvHome = (TextView) convertView.findViewById(R.id.phone);
         // Populate the data into the template view using the data object
-        tvName.setText(user.getName() + " " + user.getLastName());
+        tvName.setText(user.getEmployeename() );
        // tvName.setTextSize(32);
        // tvHome.setText(user.getPhoneno());
      //   tvHome.setTextSize(32);

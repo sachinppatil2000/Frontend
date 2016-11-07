@@ -9,4 +9,5 @@
     <color name="counter_text_color">#004081</color>
     <color name="counter_text_bg">#FF4081</color>
    <color name="list_background_pressed">#696969</color>
+    <color name="Mustardyellow">#FCC02A</color>
 </resources>

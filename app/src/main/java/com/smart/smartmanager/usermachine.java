@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.smart.smartmanager.R;
 
 import org.json.JSONArray;
@@ -66,11 +68,12 @@ public class usermachine extends AppCompatActivity {
         }
         else
         {
-            String msg_dummy =  getString(R.string.dummy_data);
+             String msg_dummy =  getString(R.string.sample_data);
             //getString(R.string.dummy_data);
             message = msg_dummy;
         }
       //  setContentView(R.layout.activity_usermachine);
+        //updateData(message);
         setContentView(R.layout.activity_usermachine);
         mTitle = mDrawerTitle = getTitle();
         // load slide menu items
@@ -150,6 +153,10 @@ public class usermachine extends AppCompatActivity {
      * */
     private void displayView(int position,String strMessage) {
         // update the main content by replacing fragments
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        SharedPreferences mPrefs = getSharedPreferences("gcmdata", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String msgjson = mPrefs.getString(navMenuTitles[position], "");
         Fragment fragment = null;
         Bundle msgBundle = new Bundle();
         msgBundle.putString("rcvdMsg",strMessage);
@@ -276,20 +283,20 @@ public class usermachine extends AppCompatActivity {
         ArrayList<userModel> arrayOfUsers = new ArrayList<userModel>();
         if(Area.equals("Buses")) {
 
-        userModel user = new userModel("Ramakant","kadam","9422374710",40,Boolean.TRUE);
+        userModel user = new userModel("Ramakant kadam","9422374710",40,Boolean.TRUE);
         arrayOfUsers.add(user);
-        userModel user1 = new userModel("Mahesh","khalap","919919191",30,Boolean.FALSE);
+        userModel user1 = new userModel("Mahesh khalap","919919191",30,Boolean.FALSE);
         arrayOfUsers.add(user1);
-        userModel user2 = new userModel("Dhondiba","Patil","95444343",35,Boolean.FALSE);
+        userModel user2 = new userModel("Dhondiba Patil","95444343",35,Boolean.FALSE);
         arrayOfUsers.add(user2);
         }
         else
         {
-            userModel user = new userModel("Sachin","Patil","9422374710",40,Boolean.TRUE);
+            userModel user = new userModel("Sachin Patil","9422374710",40,Boolean.TRUE);
             arrayOfUsers.add(user);
-            userModel user1 = new userModel("Sanjay","More","919919191",30,Boolean.FALSE);
+            userModel user1 = new userModel("Sanjay More","919919191",30,Boolean.FALSE);
             arrayOfUsers.add(user1);
-            userModel user2 = new userModel("Snehal","Patil","95444343",35,Boolean.FALSE);
+            userModel user2 = new userModel("SnehalPatil","95444343",35,Boolean.FALSE);
             arrayOfUsers.add(user2);
         }
         return arrayOfUsers;
