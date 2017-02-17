@@ -37,7 +37,6 @@ public class factoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_factoryfloor, container, false);
         machinelistView = (ListView)(rootView.findViewById(R.id.machinelist));
         Bundle bundle = this.getArguments();
@@ -46,18 +45,16 @@ public class factoryFragment extends Fragment {
         updateData(msg);
         return rootView;
     }
+
     private void updateData(String msgRecieved)
     {
-
         String Area="";
         JSONArray devicelist= null;
         ArrayNode datasetArray = null;
         List<userModel> userlist = null;
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-
        // mapper.configure(JsonParser.Feature.A, true);
-
         try {
             JsonNode rootNode = mapper.readTree(msgRecieved);
             Area =rootNode.get("Location").getValueAsText();// reader.getString("Location");
@@ -68,20 +65,13 @@ public class factoryFragment extends Fragment {
                     if ("biometric".equals(devicetype)) {
                         Iterator<JsonNode> iterator = objNode.get("AttendenceInfo").getElements();
                         userlist = getUsers(Area,iterator);
-                    } /*else {
-                        objNode.get("DeviceName").getTextValue();
-                        objNode.get("CurrentStatus").getTextValue();
-                        objNode.get("DeviceType").getTextValue();
-                        // add device to devicelist getdevices
-                    }*/
+                    }
                     System.out.println(objNode);
                 }
             }
 
 
             String testString = "";
-            //JSONObject reader = new JSONObject(msgRecieved);
-           // devicelist = reader.getJSONArray("devices");
 
         }
         catch(java.io.IOException e)
@@ -112,24 +102,6 @@ public class factoryFragment extends Fragment {
             arrayOfUsers.add(user);
 
         }
-       /* if(Area.equals("Buses")) {
-
-            userModel user = new userModel("Ramakant kadam","9422374710",40,Boolean.TRUE);
-            arrayOfUsers.add(user);
-            userModel user1 = new userModel("Mahesh khalap","919919191",30,Boolean.FALSE);
-            arrayOfUsers.add(user1);
-            userModel user2 = new userModel("Dhondiba Patil","95444343",35,Boolean.FALSE);
-            arrayOfUsers.add(user2);
-        }
-        else
-        {
-            userModel user = new userModel("Sachin Patil","9422374710",40,Boolean.TRUE);
-            arrayOfUsers.add(user);
-            userModel user1 = new userModel("Sanjay More","919919191",30,Boolean.FALSE);
-            arrayOfUsers.add(user1);
-            userModel user2 = new userModel("Snehal Patil","95444343",35,Boolean.FALSE);
-            arrayOfUsers.add(user2);
-        }*/
         return arrayOfUsers;
     }
 

@@ -50,6 +50,7 @@ public class usermachine extends AppCompatActivity {
 
     // slide menu items
     private String[] navMenuTitles;
+    private String[] defaultData;
     private TypedArray navMenuIcons;
 
     private ArrayList<NavDrawerItem> navDrawerItems;
@@ -89,15 +90,6 @@ public class usermachine extends AppCompatActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         // Find People
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Photos
-     //   navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        // Communities, Will add a counter here
-   //     navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
-        // Pages
-    //    navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        // What's hot, We  will add a counter here
-     //   navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
-        // Recycle the typed array
         navMenuIcons.recycle();
 
         // setting the nav drawer list adapter
@@ -157,9 +149,16 @@ public class usermachine extends AppCompatActivity {
         SharedPreferences mPrefs = getSharedPreferences("gcmdata", MODE_PRIVATE);
         Gson gson = new Gson();
         String msgjson = mPrefs.getString(navMenuTitles[position], "");
+        defaultData = getResources().getStringArray(R.array.Machine_default_data);
+        if(msgjson.isEmpty())
+        {
+            msgjson =  defaultData[position];
+        }
         Fragment fragment = null;
+        Fragment summaryFragment = null;
+        summaryFragment = new SummaryFragment();
         Bundle msgBundle = new Bundle();
-        msgBundle.putString("rcvdMsg",strMessage);
+        msgBundle.putString("rcvdMsg",msgjson);
         switch (position) {
             case 0:
                 fragment = new factoryFragment();
@@ -177,7 +176,7 @@ public class usermachine extends AppCompatActivity {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.frame_container, fragment).commit();
-
+            fragmentManager.beginTransaction().replace(R.id.summary,summaryFragment);
             // update selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);

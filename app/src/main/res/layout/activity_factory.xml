@@ -1,12 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0047AB">
-    <fragment android:name="com.smart.smartmanager.FactoryActivityFragment"
-        android:id="@+id/factory"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+    <fragment android:name="com.smart.smartmanager.SummaryFragment"
+        android:id="@+id/summary"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-</LinearLayout>
+  <!--  <fragment android:name="com.smart.smartmanager.FactoryActivityFragment"
+        android:id="@+id/factory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+</FrameLayout>
