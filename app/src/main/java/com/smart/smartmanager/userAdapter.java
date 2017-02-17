@@ -1,11 +1,15 @@
 package com.smart.smartmanager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,9 +29,13 @@ import java.util.List;
 public class userAdapter extends ArrayAdapter<userModel> {
 
     final private  Activity usermachinActivity;
+    final private Context ctx;
+    // Request code for READ_CONTACTS. It can be any number > 0.
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+
     public userAdapter(Context context, List<userModel> objects) {
         super(context, 0, objects);
-
+        ctx = context;
         usermachinActivity = (Activity)context;
     }
 
@@ -59,19 +67,33 @@ public class userAdapter extends ArrayAdapter<userModel> {
         button.setText(user.getPhoneno());
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Boolean readrights=false;
                 // Perform action on click
-                Button telbutton = (Button)v;
+                Button telbutton = (Button) v;
                 System.out.println("here in the click event");
-                try {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
-                    usermachinActivity.startActivity(callIntent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && ctx.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+                    //      int permissionCheck = ctx.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+                {
+                    usermachinActivity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+                    readrights=true;
                 }
-                catch(Exception e) {
+                else
+                {
+                    readrights=true;
+                }
 
-                    e.printStackTrace();
-                     }
+                if(readrights) {
+                    try {
+                         Intent callIntent = new Intent(Intent.ACTION_CALL);
+                         callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
+                         usermachinActivity.startActivity(callIntent);
+                    } catch (Exception e) {
 
+                        e.printStackTrace();
+                    }
+                }
             }
         });
         TextView tvHome = (TextView) convertView.findViewById(R.id.phone);

@@ -1,10 +1,13 @@
 package com.smart.smartmanager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +28,12 @@ import java.util.List;
 public class useronMachineAdapter extends ArrayAdapter <useronmachineModel>
 {
     final private Activity usermachineActivity;
+    final private Context ctx;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
     public useronMachineAdapter(Context context, List<useronmachineModel> objects) {
        super(context, 0, objects);
-
+        ctx = context;
         usermachineActivity = (Activity)context;
     }
 
@@ -79,18 +84,32 @@ public class useronMachineAdapter extends ArrayAdapter <useronmachineModel>
         button.setText(user.getPhoneno());
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                Boolean readrights=false;
                 // Perform action on click
                 Button telbutton = (Button) v;
                 System.out.println("here in the click event");
-                try {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
-                    usermachineActivity.startActivity(callIntent);
-                } catch (Exception e) {
-
-                    e.printStackTrace();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && ctx.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+                //      int permissionCheck = ctx.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+                {
+                    usermachineActivity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+                    readrights= true;
                 }
+                else
+                {
+                    readrights= true;
+                }
+                if(readrights) {
+                    try {
+                         Intent callIntent = new Intent(Intent.ACTION_CALL);
+                         callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
+                         usermachineActivity.startActivity(callIntent);
+                    } catch (Exception e) {
 
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
