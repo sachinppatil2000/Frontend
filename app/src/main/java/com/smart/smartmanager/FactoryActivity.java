@@ -34,7 +34,7 @@ public class FactoryActivity extends ActionBarActivity {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FactoryActivityFragment fragment = new FactoryActivityFragment();
-            fragmentTransaction.add(R.id.factory, fragment);
+        //    fragmentTransaction.add(R.id.factory, fragment);
             //  fragment = new FactoryActivityFragment();
             // fragmentTransaction.add(R.id.factory,fragment);
             fragmentTransaction.commit();
