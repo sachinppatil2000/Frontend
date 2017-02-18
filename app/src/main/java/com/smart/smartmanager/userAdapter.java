@@ -1,15 +1,11 @@
 package com.smart.smartmanager;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,13 +25,9 @@ import java.util.List;
 public class userAdapter extends ArrayAdapter<userModel> {
 
     final private  Activity usermachinActivity;
-    final private Context ctx;
-    // Request code for READ_CONTACTS. It can be any number > 0.
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-
     public userAdapter(Context context, List<userModel> objects) {
         super(context, 0, objects);
-        ctx = context;
+
         usermachinActivity = (Activity)context;
     }
 
@@ -52,11 +44,11 @@ public class userAdapter extends ArrayAdapter<userModel> {
 
         if(user.getStatus())
         {
-            convertView.setBackgroundColor(Color.GREEN);
+            convertView.setBackgroundColor(Color.WHITE);
         }
         else
         {
-            convertView.setBackgroundColor(Color.RED);
+            convertView.setBackgroundColor(Color.WHITE);
         }
         // Lookup view for data population
         int resid = usermachinActivity.getResources().getIdentifier("employee","drawable",usermachinActivity.getPackageName());
@@ -64,41 +56,26 @@ public class userAdapter extends ArrayAdapter<userModel> {
         TextView tvName = (TextView) convertView.findViewById(R.id.Name);
 
         final Button button = (Button) convertView.findViewById(R.id.phone);
-        button.setText(user.getPhoneno());
+            button.setText(user.getContactno());
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Boolean readrights=false;
                 // Perform action on click
-                Button telbutton = (Button) v;
+                Button telbutton = (Button)v;
                 System.out.println("here in the click event");
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && ctx.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
-                    //      int permissionCheck = ctx.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
-                {
-                    usermachinActivity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-                    readrights=true;
+                try {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
+                    usermachinActivity.startActivity(callIntent);
                 }
-                else
-                {
-                    readrights=true;
-                }
+                catch(Exception e) {
+                     e.printStackTrace();
+                     }
 
-                if(readrights) {
-                    try {
-                         Intent callIntent = new Intent(Intent.ACTION_CALL);
-                         callIntent.setData(Uri.parse("tel:" + telbutton.getText()));
-                         usermachinActivity.startActivity(callIntent);
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-                    }
-                }
             }
         });
         TextView tvHome = (TextView) convertView.findViewById(R.id.phone);
         // Populate the data into the template view using the data object
-        tvName.setText(user.getName() + " " + user.getLastName());
+        tvName.setText(user.getEmployeename() );
        // tvName.setTextSize(32);
        // tvHome.setText(user.getPhoneno());
      //   tvHome.setTextSize(32);

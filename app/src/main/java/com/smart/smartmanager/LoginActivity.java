@@ -1,6 +1,5 @@
 package com.smart.smartmanager;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -10,7 +9,6 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,7 +37,7 @@ import java.util.List;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -145,7 +143,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-            Intent intent = new Intent(this,FactoryActivity.class);
+            Intent intent = new Intent(this,usermachine.class);
             Intent serintent = new Intent(this,RegistrationIntentService.class);
             startService(serintent);
             startActivity(intent);
@@ -200,23 +198,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader curloader=null;
-
-        Boolean readrights=false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && this.getApplicationContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
-        //      int permissionCheck = ctx.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
-        {
-            this.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-            readrights= true;
-        }
-        else
-        {
-            readrights= true;
-        }
-
-        if (readrights)
-            curloader = new CursorLoader(this,
+        return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
@@ -229,7 +211,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-        return curloader;
     }
 
     @Override

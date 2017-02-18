@@ -14,19 +14,19 @@ public class useronmachineModel {
     public useronmachineModel(String firstName,String lastname,String phoneno,int age,Boolean userstatus,String machineName, Boolean machineStatus )
     {
 
-      driver = new userModel(firstName,lastname,phoneno,age,userstatus);
+      driver = new userModel(lastname,phoneno,age,userstatus);
         machine = new machineModel(machineName,machineStatus);
 
     }
 
     public void setDriverName(String name)
     {
-        driver.setName(name);
+        driver.setEmployeename(name);
     }
 
     public String getDriverName()
     {
-        return driver.getName();
+        return driver.getEmployeename();
     }
 
     public void setLastName(String name)
@@ -50,12 +50,12 @@ public class useronmachineModel {
     }
     public void setPhoneno(String phoneno)
     {
-        driver.setPhoneno(phoneno);
+        driver.setContactno(phoneno);
     }
 
     public String getPhoneno()
     {
-        return driver.getPhoneno();
+        return driver.getContactno();
     }
 
     public void setStatus(Boolean status)

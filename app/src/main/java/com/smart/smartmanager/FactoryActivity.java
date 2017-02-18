@@ -27,13 +27,14 @@ public class FactoryActivity extends ActionBarActivity {
             }
             else
             {
-                String msg_dummy = getString(R.string.dummy_data);
+                String msg_dummy =  getString(R.string.dummy_data);
+                //getString(R.string.dummy_data);
                 message = msg_dummy;
             }
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FactoryActivityFragment fragment = new FactoryActivityFragment();
-            fragmentTransaction.add(R.id.factory, fragment);
+        //    fragmentTransaction.add(R.id.factory, fragment);
             //  fragment = new FactoryActivityFragment();
             // fragmentTransaction.add(R.id.factory,fragment);
             fragmentTransaction.commit();

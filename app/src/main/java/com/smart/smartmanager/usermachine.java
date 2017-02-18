@@ -1,19 +1,29 @@
 package com.smart.smartmanager;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+//import android.support.v4.app.AppCompatActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.smart.smartmanager.R;
 
 import org.json.JSONArray;
@@ -27,41 +37,156 @@ public class usermachine extends AppCompatActivity {
 
     ListView listView ;
     ListView machinelistView ;
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private String message;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    // nav drawer title
+    private CharSequence mDrawerTitle;
+
+    // used to store app title
+    private CharSequence mTitle;
+
+    // slide menu items
+    private String[] navMenuTitles;
+    private String[] defaultData;
+    private TypedArray navMenuIcons;
+
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private NavDrawerListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_usermachine);
-        Intent intent = getIntent();
-        String Area = intent.getStringExtra("Area");
-        String msgRecieved = intent.getStringExtra("msgRecieved");
-        updateData(msgRecieved);
-  /*   JSONArray devicelist= null;
-
-     try {
-            JSONObject reader = new JSONObject(msgRecieved);
-            devicelist = reader.getJSONArray("devices");
-      }
-        catch(org.json.JSONException e)
-        {
-            e.printStackTrace();
+        Intent latestIntent = getIntent();
+        Bundle Extras = latestIntent.getExtras();
+        if (Extras!=null) {
+            if (Extras.containsKey("gcmMessage")) {
+                String msg = Extras.getString("gcmMessage");
+                message = msg;
+            }
         }
-        machinelistView = (ListView) findViewById(R.id.machinelist);
-        // Construct the data source
-     // Create the adapter to convert the array to views
-        userAdapter adapter = new userAdapter(this,getUsers(Area));
-        listView.setAdapter(adapter);
+        else
+        {
+             String msg_dummy =  getString(R.string.sample_data);
+            //getString(R.string.dummy_data);
+            message = msg_dummy;
+        }
+      //  setContentView(R.layout.activity_usermachine);
+        //updateData(message);
+        setContentView(R.layout.activity_usermachine);
+        mTitle = mDrawerTitle = getTitle();
+        // load slide menu items
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        // nav drawer icons from resources
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+        // adding nav drawer items to array
+        // Home
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        // Find People
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        navMenuIcons.recycle();
 
-      // Create the adapter to convert the array to views
-        machineAdapter madapter = new machineAdapter(this, getMachines(Area,devicelist));
-        machinelistView.setAdapter(madapter);
-        utils layoututil = new utils();
-        layoututil.setListViewHeightBasedOnChildren(machinelistView);
-        layoututil.setListViewHeightBasedOnChildren(listView);*/
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getApplicationContext(),
+                navDrawerItems);
+        mDrawerList.setAdapter(adapter);
+
+        // enabling action bar app icon and behaving it as toggle button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.employee, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ){
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+        if (savedInstanceState == null) {
+            // on first time display view for first nav item
+            displayView(0,message);
+        }
     }
 
+    /**
+     * Slide menu item click listener
+     * */
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position,message);
+        }
+    }
 
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
+    private void displayView(int position,String strMessage) {
+        // update the main content by replacing fragments
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        SharedPreferences mPrefs = getSharedPreferences("gcmdata", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String msgjson = mPrefs.getString(navMenuTitles[position], "");
+        defaultData = getResources().getStringArray(R.array.Machine_default_data);
+        if(msgjson.isEmpty())
+        {
+            msgjson =  defaultData[position];
+        }
+        Fragment fragment = null;
+        Fragment summaryFragment = null;
+        summaryFragment = new SummaryFragment();
+        Bundle msgBundle = new Bundle();
+        msgBundle.putString("rcvdMsg",msgjson);
+        switch (position) {
+            case 0:
+                fragment = new factoryFragment();
+                fragment.setArguments(msgBundle);
+                break;
+            case 1:
+                fragment = new factoryFragment();
+                fragment.setArguments(msgBundle);
+                break;
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.summary,summaryFragment);
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            setTitle(navMenuTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+        }
+    }
     private void updateData(String msgRecieved)
     {
 
@@ -77,7 +202,7 @@ public class usermachine extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-        machinelistView = (ListView) findViewById(R.id.machinelist);
+      //  machinelistView = (ListView) findViewById(R.id.machinelist);
         // Construct the data source
         // Create the adapter to convert the array to views
         userAdapter adapter = new userAdapter(this,getUsers(Area));
@@ -102,38 +227,75 @@ public class usermachine extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.string.action_settings) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+
+    /***
+     * Called when invalidateOptionsMenu() is triggered
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // if nav drawer is opened, hide the action items
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    /**
+     * When using the ActionBarDrawerToggle, you must call it during
+     * onPostCreate() and onConfigurationChanged()...
+     */
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
 
     private ArrayList<userModel> getUsers(String Area)
     {
         ArrayList<userModel> arrayOfUsers = new ArrayList<userModel>();
         if(Area.equals("Buses")) {
 
-        userModel user = new userModel("Ramakant","kadam","9422374710",40,Boolean.TRUE);
+        userModel user = new userModel("Ramakant kadam","9422374710",40,Boolean.TRUE);
         arrayOfUsers.add(user);
-        userModel user1 = new userModel("Mahesh","khalap","919919191",30,Boolean.FALSE);
+        userModel user1 = new userModel("Mahesh khalap","919919191",30,Boolean.FALSE);
         arrayOfUsers.add(user1);
-        userModel user2 = new userModel("Dhondiba","Patil","95444343",35,Boolean.FALSE);
+        userModel user2 = new userModel("Dhondiba Patil","95444343",35,Boolean.FALSE);
         arrayOfUsers.add(user2);
         }
         else
         {
-            userModel user = new userModel("Sachin","Patil","9422374710",40,Boolean.TRUE);
+            userModel user = new userModel("Sachin Patil","9422374710",40,Boolean.TRUE);
             arrayOfUsers.add(user);
-            userModel user1 = new userModel("Sanjay","More","919919191",30,Boolean.FALSE);
+            userModel user1 = new userModel("Sanjay More","919919191",30,Boolean.FALSE);
             arrayOfUsers.add(user1);
-            userModel user2 = new userModel("Snehal","Patil","95444343",35,Boolean.FALSE);
+            userModel user2 = new userModel("SnehalPatil","95444343",35,Boolean.FALSE);
             arrayOfUsers.add(user2);
         }
         return arrayOfUsers;
@@ -210,19 +372,6 @@ public class usermachine extends AppCompatActivity {
         else
             boolStatus = Boolean.FALSE;
         return boolStatus;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-                //showContacts();
-            } else {
-                Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
 
