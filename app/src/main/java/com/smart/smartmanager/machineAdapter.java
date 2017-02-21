@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.smart.smartmanager.R.*;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +30,44 @@ import java.util.Locale;
 /**
  * Created by Sachin_Patil06 on 9/15/2015.
  */
-public class machineAdapter  extends ArrayAdapter<machineModel> {
+public class machineAdapter  extends RecyclerView.Adapter<MachineViewHolder>{
+
+    private ArrayList<machineModel> list;
+
+    public machineAdapter(ArrayList<machineModel> Data) {
+
+        list = Data;
+
+    }
+
+
+
+    @Override
+    public MachineViewHolder onCreateViewHolder(ViewGroup parent,int viewType) {
+        // create a new view
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(layout.itemmachine, parent, false);
+        MachineViewHolder holder = new MachineViewHolder(view);
+        return holder;
+    }
+    @Override
+    public void onBindViewHolder(final MachineViewHolder holder, int position) {
+
+        holder.titleTextView.setText(list.get(position).getName());
+        // holder.coverImageView.setImageResource(list.get(position).getImageResourceId());
+        // holder.coverImageView.setTag(list.get(position).getContactno());
+        // holder.likeImageView.setTag(R.drawable.telephone);
+
+    }
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    /*
+
+
+
     final private Activity usermachinActivity;
 
     private static final String TAG = "CallCamera";
@@ -105,8 +144,8 @@ public class machineAdapter  extends ArrayAdapter<machineModel> {
 
     private File getOutputPhotoFile() {
         File directory = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES),/* getPackageName()*/"test" );
-        if (!directory.exists()) {
+                Environment.DIRECTORY_PICTURES),/* getPackageName()"test" ); */
+     /*   if (!directory.exists()) {
             if (!directory.mkdirs()) {
                 Log.e(TAG, "Failed to create storage directory.");
                 return null;
@@ -138,6 +177,6 @@ public class machineAdapter  extends ArrayAdapter<machineModel> {
                //         Toast.LENGTH_LONG).show();
             }
         }
-    }
+    } */
 
 }

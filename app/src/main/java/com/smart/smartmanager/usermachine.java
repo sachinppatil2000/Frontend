@@ -205,15 +205,15 @@ public class usermachine extends AppCompatActivity {
       //  machinelistView = (ListView) findViewById(R.id.machinelist);
         // Construct the data source
         // Create the adapter to convert the array to views
-        userAdapter adapter = new userAdapter(this,getUsers(Area));
-        listView.setAdapter(adapter);
+        //userAdapter adapter = new userAdapter(this,getUsers(Area));
+        //listView.setAdapter(adapter);
 
         // Create the adapter to convert the array to views
-        machineAdapter madapter = new machineAdapter(this, getMachines(Area,devicelist));
-        machinelistView.setAdapter(madapter);
+       // machineAdapter madapter = new machineAdapter(getMachines(Area,devicelist));
+        //machinelistView.setAdapter(madapter);
         utils layoututil = new utils();
-        layoututil.setListViewHeightBasedOnChildren(machinelistView);
-        layoututil.setListViewHeightBasedOnChildren(listView);
+       // layoututil.setListViewHeightBasedOnChildren(machinelistView);
+        //layoututil.setListViewHeightBasedOnChildren(listView);
     }
 
 

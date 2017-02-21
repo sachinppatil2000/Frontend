@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,14 +18,42 @@ import android.widget.TextView;
 
 import com.smart.smartmanager.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Sachin_Patil06 on 9/15/2015.
  */
-public class userAdapter extends ArrayAdapter<userModel> {
+public class userAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
-    final private  Activity usermachinActivity;
+    private ArrayList<userModel> list;
+    public userAdapter(ArrayList<userModel> Data) {
+        list = Data;
+    }
+
+    @Override
+    public UserViewHolder onCreateViewHolder(ViewGroup parent,int viewType) {
+        // create a new view
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.itemuser, parent, false);
+        UserViewHolder holder = new UserViewHolder(view);
+        return holder;
+    }
+    @Override
+    public void onBindViewHolder(final UserViewHolder holder, int position) {
+
+        holder.titleTextView.setText(list.get(position).getEmployeename());
+       // holder.coverImageView.setImageResource(list.get(position).getImageResourceId());
+       // holder.coverImageView.setTag(list.get(position).getContactno());
+       // holder.likeImageView.setTag(R.drawable.telephone);
+
+    }
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+  /*  final private  Activity usermachinActivity;
     public userAdapter(Context context, List<userModel> objects) {
         super(context, 0, objects);
 
@@ -88,4 +117,5 @@ public class userAdapter extends ArrayAdapter<userModel> {
     {
       //  adapterview.startActivity(callintent)
     }
+    */
 }

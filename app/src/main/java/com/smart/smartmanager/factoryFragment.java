@@ -3,9 +3,12 @@ package com.smart.smartmanager;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -30,19 +33,57 @@ import java.util.List;
  */
 public class factoryFragment extends Fragment {
 
-    ListView listView ;
-    ListView machinelistView ;
+
+    RecyclerView listView ;
+    RecyclerView machinelistView ;
+    RecyclerView vendorlistView ;
+    LinearLayout summaryView;
+    locationSummaryViewHolder summaryholder;
     public factoryFragment(){ }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_factoryfloor, container, false);
-        machinelistView = (ListView)(rootView.findViewById(R.id.machinelist));
+        machinelistView = (RecyclerView)(rootView.findViewById(R.id.machinelist));
+
         Bundle bundle = this.getArguments();
         String msg = bundle.getString("rcvdMsg");
-        listView = (ListView)(rootView.findViewById(R.id.userlist));
+
+        summaryView = (LinearLayout)(rootView.findViewById(R.id.locationsummary));
+        LinearLayoutManager summaryLayoutManager = new LinearLayoutManager(getActivity());
+        summaryholder = new locationSummaryViewHolder(summaryView);
+
+        listView = (RecyclerView)(rootView.findViewById(R.id.userlist));
+        listView.setHasFixedSize(true);
+        LinearLayoutManager userLayoutManager = new LinearLayoutManager(getActivity());
+        userLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        listView.setLayoutManager(userLayoutManager);
+
+        machinelistView = (RecyclerView)(rootView.findViewById(R.id.machinelist));
+        machinelistView.setHasFixedSize(true);
+        LinearLayoutManager machineLayoutManager = new LinearLayoutManager(getActivity());
+        machineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        machinelistView.setLayoutManager(machineLayoutManager);
+
+        vendorlistView = (RecyclerView)(rootView.findViewById(R.id.vendorlist));
+        vendorlistView.setHasFixedSize(true);
+        LinearLayoutManager vendorLayoutManager = new LinearLayoutManager(getActivity());
+        vendorLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        vendorlistView.setLayoutManager(vendorLayoutManager);
         updateData(msg);
+
+
+       // View view = inflater.inflate(R.layout.fragment_horizontal_list_view, container, false);
+      /*  MyRecyclerView = (RecyclerView) view.findViewById(R.id.cardView);
+        MyRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
+        MyLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        if (listitems.size() > 0 & MyRecyclerView != null) {
+            MyRecyclerView.setAdapter(new MyAdapter(listitems));
+        }
+        MyRecyclerView.setLayoutManager(MyLayoutManager); */
+
         return rootView;
     }
 
@@ -51,7 +92,9 @@ public class factoryFragment extends Fragment {
         String Area="";
         JSONArray devicelist= null;
         ArrayNode datasetArray = null;
-        List<userModel> userlist = null;
+        locationSummaryModel locationSummary = null;
+        ArrayList<userModel> userlist = null;
+        ArrayList<vendorModel> vendorlist = null;
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
        // mapper.configure(JsonParser.Feature.A, true);
@@ -59,12 +102,15 @@ public class factoryFragment extends Fragment {
             JsonNode rootNode = mapper.readTree(msgRecieved);
             Area =rootNode.get("Location").getValueAsText();// reader.getString("Location");
             datasetArray= (ArrayNode)rootNode.get("devices");
+            locationSummary = getLocationSummary(Area,datasetArray);
             if (datasetArray.isArray()) {
                 for (final JsonNode objNode : datasetArray) {
                     String devicetype = objNode.get("DeviceType").getValueAsText();
                     if ("biometric".equals(devicetype)) {
                         Iterator<JsonNode> iterator = objNode.get("AttendenceInfo").getElements();
+                        Iterator<JsonNode> viterator = objNode.get("AttendenceInfo").getElements();
                         userlist = getUsers(Area,iterator);
+                        vendorlist = getVendors(Area,viterator);
                     }
                     System.out.println(objNode);
                 }
@@ -79,17 +125,27 @@ public class factoryFragment extends Fragment {
             e.printStackTrace();
         }
 
+        //
+
+
+        locationSummaryAdapter.loadData(summaryholder,locationSummary);
+        
         // Construct the data source
         // Create the adapter to convert the array to views
-        userAdapter adapter = new userAdapter(getActivity(),userlist);
+        userAdapter adapter = new userAdapter(userlist);
         listView.setAdapter(adapter);
 
         // Create the adapter to convert the array to views
-        machineAdapter madapter = new machineAdapter(getActivity(), getMachines(Area,datasetArray));
+        machineAdapter madapter = new machineAdapter(getMachines(Area,datasetArray));
         machinelistView.setAdapter(madapter);
+
+
+        // Create the adapter to convert the array to views
+        vendorAdapter vadapter = new vendorAdapter(vendorlist);
+        vendorlistView.setAdapter(vadapter);
         utils layoututil = new utils();
-        layoututil.setListViewHeightBasedOnChildren(machinelistView);
-        layoututil.setListViewHeightBasedOnChildren(listView);
+        //layoututil.setListViewHeightBasedOnChildren(machinelistView);
+        //layoututil.setListViewHeightBasedOnChildren(listView);
     }
 
     private ArrayList<userModel> getUsers(String Area,Iterator<JsonNode> attendenceInformation )
@@ -168,6 +224,19 @@ public class factoryFragment extends Fragment {
         return arrayOfMachine;
     }
 
+    //get list of vendors from the vendor database
+    private ArrayList<vendorModel> getVendors(String Area,Iterator<JsonNode> attendenceInformation )
+    {
+        ArrayList<vendorModel> arrayOfvendors = new ArrayList<vendorModel>();
+
+        for (;attendenceInformation.hasNext();attendenceInformation.next()){
+            JsonNode userInfo = attendenceInformation.next();
+            vendorModel vendor = new vendorModel(userInfo.get("employeename").getValueAsText(),userInfo.get("contactno").getValueAsText(),40,"CNCVendor");
+            arrayOfvendors.add(vendor);
+        }
+        return arrayOfvendors;
+    }
+
     private Boolean getStatus(String status)
     {
         Boolean boolStatus;
@@ -178,5 +247,14 @@ public class factoryFragment extends Fragment {
         return boolStatus;
     }
 
+    private locationSummaryModel getLocationSummary(String Area,ArrayNode devices)
+    {
+        locationSummaryModel summary = new locationSummaryModel();
+        summary.setWorkDone("10 Hrs");
+        summary.setCurrentConsumption("500 units");
+        summary.setNoOfEmployeesPresent("5");
+
+        return summary;
+    }
 
 }

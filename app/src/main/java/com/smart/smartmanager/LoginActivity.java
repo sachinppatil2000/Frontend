@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -198,6 +199,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+
+       // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M 
+     //   && ctx.checkSelfPermission(Manifest.permission.READ) != PackageManager.PERMISSION_GRANTED) 
+        //      int permissionCheck = ctx.checkSelfPermission(this, Manifest.permission.CALL_PHONE); 
+        // {     usermachinActivity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);     readrights=true; } 
+        // else {     readrights=true; }
+
+
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,

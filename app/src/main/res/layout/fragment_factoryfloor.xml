@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10"
-    android:background="#0047AB"
     android:orientation="vertical"
+    android:scrollbars="none"
     tools:context=".usermachine">
    <!-- <HorizontalScrollView
         android:layout_width="fill_parent"
@@ -15,19 +14,61 @@
             android:layout_height="match_parent">
                </LinearLayout>
     </HorizontalScrollView> -->
-    <ListView android:id="@+id/userlist"
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:orientation="vertical"
+     >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="1dp"
-              />
-
-    <ListView android:id="@+id/machinelist"
+        android:orientation="vertical"
+        android:id="@+id/locationsummary">
+        <TextView
+            android:id="@+id/noofEmployeesPresent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="Name" />
+        <TextView
+            android:id="@+id/hoursofwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="Name" />
+        <TextView
+            android:id="@+id/electicityconsumed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="Name" />
+        </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <android.support.v7.widget.RecyclerView android:id="@+id/userlist"
+        android:layout_width="match_parent"
         android:layout_margin="1dp"
-        android:layout_weight="4"
-        />
-
-
-</LinearLayout>
+        android:layout_height="match_parent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <android.support.v7.widget.RecyclerView  android:id="@+id/machinelist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"/>
+    </LinearLayout>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical" >
+         <android.support.v7.widget.RecyclerView  android:id="@+id/vendorlist"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_margin="1dp"/>
+     </LinearLayout>
+ </LinearLayout>
+</ScrollView>
