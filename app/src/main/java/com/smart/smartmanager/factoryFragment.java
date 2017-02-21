@@ -129,7 +129,7 @@ public class factoryFragment extends Fragment {
 
 
         locationSummaryAdapter.loadData(summaryholder,locationSummary);
-        
+
         // Construct the data source
         // Create the adapter to convert the array to views
         userAdapter adapter = new userAdapter(userlist);
