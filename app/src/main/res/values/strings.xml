@@ -10,6 +10,10 @@
     <string name="title_activity_user_on_machine">UserOnMachineActivity</string>
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
+    <string name="factory_Summary">Factory Summary</string>
+    <string name="employee">Employee Details</string>
+    <string name="machines">Tools And Machines</string>
+    <string name="Vendors">Vendors</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
